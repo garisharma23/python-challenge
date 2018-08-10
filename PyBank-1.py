@@ -1,11 +1,12 @@
 import os
 import csv
 
-#PyBank_csv_path= os.path.join("PyBank","Resources","budget_data.csv")
+PyBank_csv_path= os.path.join("budget_data.csv")
+output_file= "budget_data.txt"
 
-totalmonth= 0
-totalprofitloss=0
-previous_revenue=0
+totalmonth = 0
+totalprofitloss = 0
+previous_revenue = 0
 revenue_array = []
 
 greatestIncreaseMonth = " "
@@ -14,11 +15,11 @@ greatestIncreaseAmount = 0.0
 greatestDecreaseMonth = " " 
 greatestDecreaseAmount = 0.0
 
-with open('budget_data.csv') as csvfile:
- 	reader = csv.DictReader(csvfile)
+with open(PyBank_csv_path) as csvfile:
+	reader = csv.reader(csvfile)
 	for row in reader:
-		currentMonth = row['Date']
-		monthlyMoney = int(row['Profit/Losses'])
+		currentMonth = int(row['Date'])
+		monthlyMoney = (row['Profit/Losses'])
 		
 		
 		totalmonth = totalmonth + 1 
@@ -35,22 +36,32 @@ with open('budget_data.csv') as csvfile:
 			greatestDecreaseAmount = delta_revenue
 			greatestDecreaseMonth = currentMonth 
 
-		previous_revenue = monthlyMoney 
+	previous_revenue = monthlyMoney 
 	
-		average_change = sum(revenue_array) / len(revenue_array)
+	average_change = sum(revenue_array) / len(revenue_array)
 
 
 	
 
+#Output
 
+print( "Total months: " + str(totalmonth))
+print("Total: " + str(totalprofitloss))
+print("Greatest Increase: " + greatestIncreaseMonth + ":::" +  str(greatestIncreaseAmount) )
+print("Greatest Decrease: " +greatestDecreaseMonth+ ":::" + str(greatestDecreaseAmount))
+print("Average Change : " + str(average_change))
 
-	print( "Total months: " + str(totalmonth))
-	print("Total: " + str(totalprofitloss))
-	print("Greatest Increase: " + greatestIncreaseMonth + ":::" +  str(greatestIncreaseAmount) )
-	print("Greatest Decrease: " +greatestDecreaseMonth+ ":::" + str(greatestDecreaseAmount))
-	print("Average Change : " + str(average_change))
-
-	 
+# to print output in text file 
+with open(output_file, "w") as txt_file:
+    txt_file.write("Total Months: " + str(totalmonth))
+    txt_file.write("\n")
+    txt_file.write("Total Revenue: " + "$" + str(totalprofitloss))
+    txt_file.write("\n")
+    txt_file.write("Average Change: " + "$" + str(round(sum(revenue_array) / len(revenue_array),2)))
+    txt_file.write("\n")
+    txt_file.write("Greatest Increase: " + str(greatestIncreaseMonth[0]) + " ($" + str(greatestIncreaseMonth[1]) + ")") 
+    txt_file.write("\n")
+    txt_file.write("Greatest Decrease: " + str(greatestDecreaseMonth[0]) + " ($" + str(greatestDecreaseMonth[1]) + ")")	 
         
 
 
